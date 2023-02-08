@@ -14,6 +14,7 @@
 
 // demos
 import DashboardCongratulationJohn from './DashboardCongratulationJohn.vue'
+import auth from '@/Services/auth'
 
 export default {
   components: {
@@ -22,6 +23,19 @@ export default {
   setup() {
     return {
     }
+  },
+  created() {
+    this.validarLogin()
+  },
+  methods: {
+    validarLogin() {
+      const data = auth.validDateLogin()
+      if (!data) {
+        sessionStorage.removeItem('tokenfafFormunica')
+        localStorage.removeItem('userfafFormunica')
+        this.$router.push('/')
+      }
+    },
   },
 }
 </script>

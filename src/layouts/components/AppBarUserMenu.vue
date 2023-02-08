@@ -103,7 +103,8 @@ export default {
   },
   methods: {
     cerrarSesion() {
-      sessionStorage.removeItem('tokenFormunica')
+      sessionStorage.removeItem('tokenfafFormunica')
+      localStorage.removeItem('userfafFormunica')
       this.$router.push({ name: 'pages-login' })
     },
   },

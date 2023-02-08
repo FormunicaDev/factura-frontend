@@ -1,7 +1,7 @@
 const { mergeSassVariables } = require('@vuetify/cli-plugin-utils')
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/formunica-sa/demo' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/impresor/' : '/',
   lintOnSave: false,
   transpileDependencies: ['vuetify'],
   chainWebpack: config => {

@@ -44,7 +44,12 @@
           <v-text-field
             v-model="globalUsuarioDTO.Password"
             label="Contraseña"
+            placeholder="············"
+            :append-icon="isPasswordVisible ? icons.mdiEyeOffOutline : icons.mdiEyeOutline"
+            :type="isPasswordVisible ? 'text' : 'password'"
             outlined
+            hide-details
+            @click:append="isPasswordVisible = !isPasswordVisible"
             @keyup.enter="login()"
           >
           </v-text-field>
@@ -76,7 +81,26 @@
             </template>
           </v-snackbar>
         </v-card-text>
-
+        <v-dialog
+          v-model="dialog"
+          hide-overlay
+          persistent
+          width="300"
+        >
+          <v-card
+            color="primary"
+            dark
+          >
+            <v-card-text>
+              Iniciando Sesión...
+              <v-progress-linear
+                indeterminate
+                color="white"
+                class="mb-0"
+              ></v-progress-linear>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
         <!-- create new account  -->
         <v-card-text class="d-flex align-center justify-center flex-wrap mt-2">
           <span class="me-2">
@@ -143,9 +167,11 @@ export default {
     }
   },
   data: () => ({
+    dialog: false,
     snackbar: false,
     text: '',
     timeout: 2000,
+    show1: false,
     globalUsuarioDTO: {
       Usuario: '',
       Password: '',
@@ -155,13 +181,16 @@ export default {
   },
   methods: {
     async login() {
+      this.dialog = true
       const data = await auth.login(this.globalUsuarioDTO)
       if ('response' in data) {
         this.snackbar = true
-        this.text = data.response.data.errors
+        this.text = data.response.data
+        this.dialog = false
       } else {
         sessionStorage.setItem('tokenfafFormunica', data[0])
         localStorage.setItem('userfafFormunica', data[2])
+        this.dialog = false
         this.$router.push({ name: 'dashboard' })
       }
     },

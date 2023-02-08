@@ -45,8 +45,6 @@
                 label="Rango de Fechas"
                 :prepend-icon="icons.mdiCalendarMonthOutline"
                 readonly
-                outlined
-                dense
                 v-bind="attrs"
                 v-on="on"
               ></v-combobox>
@@ -160,6 +158,7 @@ import {
   mdiPencil, mdiDelete, mdiPrinter, mdiReload, mdiCalendarMonthOutline, mdiSync,
 } from '@mdi/js'
 import facturas from '@/Services/factura'
+import auth from '@/Services/auth'
 
 export default {
   setup() {
@@ -233,6 +232,7 @@ export default {
 
   async created() {
     await this.getFacturas()
+    this.validarLogin()
   },
   methods: {
     async getFacturas() {
@@ -279,8 +279,10 @@ export default {
     async printConfirm() {
       this.dialogPrint = false
       const impresa = this.switch1 === true ? 1 : 0
+
       window.open(`http://localhost:5144/api/printinvoice?CodSucursal=${this.print.codsucursal}&numeroFactura=${this.print.factura}&impresa=${impresa}`, '_blank')
 
+      // window.open(`http://10.10.0.16:8085/api/printinvoice?CodSucursal=${this.print.codsucursal}&numeroFactura=${this.print.factura}&impresa=${impresa}`, '_blank')
       if (!this.switch1) {
         setTimeout(async () => {
           await this.establecerFacturaImpresa()
@@ -294,6 +296,14 @@ export default {
         this.editedItem = { ...this.defaultItem }
         this.editedIndex = -1
       })
+    },
+    validarLogin() {
+      const data = auth.validDateLogin()
+      if (!data) {
+        sessionStorage.removeItem('tokenfafFormunica')
+        localStorage.removeItem('userfafFormunica')
+        this.$router.push('/')
+      }
     },
 
   },
