@@ -3,6 +3,55 @@
     class="rounded-xl"
     elevation="7"
   >
+    <v-card-title>
+      <v-spacer></v-spacer>
+      <v-menu
+        v-if="switch1"
+        ref="menu"
+        v-model="menu"
+        :close-on-content-click="false"
+        :return-value.sync="dates"
+        transition="scale-transition"
+        offset-y
+        min-width="auto"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-combobox
+            v-model="dates"
+            multiple
+            chips
+            small-chips
+            label="Rango de Fechas"
+            :prepend-icon="icons.mdiCalendarMonthOutline"
+            readonly
+            v-bind="attrs"
+            v-on="on"
+          ></v-combobox>
+        </template>
+        <v-date-picker
+          v-model="dates"
+          range
+          no-title
+          scrollable
+        >
+          <v-spacer></v-spacer>
+          <v-btn
+            text
+            color="primary"
+            @click="menu = false"
+          >
+            Cancelar
+          </v-btn>
+          <v-btn
+            text
+            color="primary"
+            @click="$refs.menu.save(dates)"
+          >
+            OK
+          </v-btn>
+        </v-date-picker>
+      </v-menu>
+    </v-card-title>
     <v-data-table
       :headers="headers"
       :items="facturas"
@@ -26,52 +75,6 @@
             inset
             :label="`Tipo Impresión: ${switch1==true?'Reimpresión':'Pendientes'}`"
           ></v-switch>
-          <v-menu
-            v-if="switch1"
-            ref="menu"
-            v-model="menu"
-            :close-on-content-click="false"
-            :return-value.sync="dates"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-combobox
-                v-model="dates"
-                multiple
-                chips
-                small-chips
-                label="Rango de Fechas"
-                :prepend-icon="icons.mdiCalendarMonthOutline"
-                readonly
-                v-bind="attrs"
-                v-on="on"
-              ></v-combobox>
-            </template>
-            <v-date-picker
-              v-model="dates"
-              range
-              no-title
-              scrollable
-            >
-              <v-spacer></v-spacer>
-              <v-btn
-                text
-                color="primary"
-                @click="menu = false"
-              >
-                Cancelar
-              </v-btn>
-              <v-btn
-                text
-                color="primary"
-                @click="$refs.menu.save(dates)"
-              >
-                OK
-              </v-btn>
-            </v-date-picker>
-          </v-menu>
           <v-divider
             class="mx-4"
             inset
@@ -194,6 +197,7 @@ export default {
       { text: 'Sucursal', value: 'sucursal' },
       { text: 'Cod. Cliente', value: 'codCliente' },
       { text: 'Cliente', value: 'cliente' },
+      { text: 'Fecha Factura', value: 'fechaFactura' },
       { text: 'SubTotal', value: 'subtotal' },
       { text: 'Total', value: 'totalFactura' },
       { text: 'Actions', value: 'actions', sortable: false },

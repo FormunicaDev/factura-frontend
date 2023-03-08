@@ -10,6 +10,7 @@ import store from './store'
 axios.defaults.baseURL = 'http://localhost:5144'
 
 // axios.defaults.baseURL = 'http://10.10.0.16:8085'
+
 axios.defaults.headers.common.Authorization = sessionStorage.getItem('tokenFormunica')
 
 Vue.config.productionTip = false

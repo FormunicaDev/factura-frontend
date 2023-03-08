@@ -5,6 +5,11 @@ export default {
     let data = []
     await axios.get(`/api/Factura/pendienteImprimir?Usuario=${obj.Usuario}&FechaInicial=${obj.FechaInicial}&FechaFinal=${obj.FechaFinal}&PendienteImprimir=${obj.PendienteImprimir}&registroPorPagina=10&pagina=${obj.pagina}`).then(res => {
       data = res.data
+      if (data.paginado.totaldePaginas > obj.pagina) {
+        // eslint-disable-next-line no-param-reassign
+        obj.pagina = 1
+        this.facturasPendientesImprimir(obj)
+      }
     }).catch(error => {
       data = error
     })
