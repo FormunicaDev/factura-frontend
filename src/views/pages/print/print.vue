@@ -4,9 +4,35 @@
     elevation="7"
   >
     <v-card-title>
+      <v-row v-if="switch1">
+        <v-col>
+          <v-container fluid>
+            <v-radio-group
+              v-model="typeSearch"
+              row
+              label="Filtrar por:"
+              :default="0"
+            >
+              <v-radio
+                label="Numero de Factura"
+                :value="1"
+              ></v-radio>
+              <v-radio
+                label="Fechas"
+                :value="2"
+              ></v-radio>
+            </v-radio-group>
+          </v-container>
+        </v-col>
+      </v-row>
       <v-spacer></v-spacer>
+      <v-text-field
+        v-if="typeSearch === 1"
+        label="Numero de Factura"
+      >
+      </v-text-field>
       <v-menu
-        v-if="switch1"
+        v-if="typeSearch === 2"
         ref="menu"
         v-model="menu"
         :close-on-content-click="false"
@@ -205,6 +231,7 @@ export default {
     facturas: [],
     facturaImprinir: [],
     editedIndex: -1,
+    typeSearch: 0,
     paginado: {
       pagina: 0,
       totaldePaginas: 0,
