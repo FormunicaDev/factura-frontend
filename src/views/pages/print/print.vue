@@ -28,6 +28,7 @@
       <v-spacer></v-spacer>
       <v-text-field
         v-if="typeSearch === 1"
+        v-model="param.NoFactura"
         label="Numero de Factura"
       >
       </v-text-field>
@@ -219,6 +220,7 @@ export default {
         sortable: false,
         value: 'factura',
       },
+      { text: 'Tipo', value: 'tipo' },
       { text: 'Cod.Sucursal', value: 'codsucursal' },
       { text: 'Sucursal', value: 'sucursal' },
       { text: 'Cod. Cliente', value: 'codCliente' },
@@ -244,6 +246,7 @@ export default {
       FechaFinal: '',
       PendienteImprimir: 0,
       pagina: 1,
+      NoFactura: null,
     },
     print: {
       codsucursal: '',
@@ -270,7 +273,6 @@ export default {
       this.overlay = true
       this.setTitle()
       this.setParam()
-      console.log(this.param)
       const data = await facturas.facturasPendientesImprimir(this.param)
       if ('response' in data) {
         this.snackbar = true
@@ -291,10 +293,15 @@ export default {
       const hoy = Date.now()
       const fecha = new Date(hoy)
       this.param.Usuario = localStorage.getItem('userfafFormunica')
-      this.param.FechaInicial = this.dates.length === 2 ? this.dates[0] : fecha.toISOString()
-      this.param.FechaFinal = this.dates.length === 2 ? this.dates[1] : fecha.toISOString()
       this.param.PendienteImprimir = this.switch1 === true ? 0 : 1
       this.param.pagina = this.page
+      if (this.typeSearch === 2) {
+        this.param.FechaInicial = this.dates.length === 2 ? this.dates[0] : fecha.toISOString()
+        this.param.FechaFinal = this.dates.length === 2 ? this.dates[1] : fecha.toISOString()
+      } else {
+        this.param.FechaInicial = '1753-1-1'
+        this.param.FechaFinal = '9999-12-31'
+      }
     },
     async getFacturaImprimir(sucursal, numFact, impresa) {
       this.facturaAImprinir = await facturas.facturaAImprinir(sucursal, numFact, impresa)

@@ -3,7 +3,7 @@ import axios from 'axios'
 export default {
   async facturasPendientesImprimir(obj) {
     let data = []
-    await axios.get(`/api/Factura/pendienteImprimir?Usuario=${obj.Usuario}&FechaInicial=${obj.FechaInicial}&FechaFinal=${obj.FechaFinal}&PendienteImprimir=${obj.PendienteImprimir}&registroPorPagina=10&pagina=${obj.pagina}`).then(res => {
+    await axios.get(`/api/Factura/pendienteImprimir?Factura=${obj.NoFactura}&Usuario=${obj.Usuario}&FechaInicial=${obj.FechaInicial}&FechaFinal=${obj.FechaFinal}&PendienteImprimir=${obj.PendienteImprimir}&registroPorPagina=10&pagina=${obj.pagina}`).then(res => {
       data = res.data
       if (data.paginado.totaldePaginas > obj.pagina) {
         // eslint-disable-next-line no-param-reassign
